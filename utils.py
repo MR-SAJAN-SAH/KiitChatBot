@@ -17,7 +17,7 @@ def download_file_from_google_drive(file_id, destination):
 def load_idx_file():
     """Downloads and loads the .idx file from Google Drive."""
     file_id = "1gm1ukBH_tAwApNOGju0ky4IyT9HdLtRy"  # Replace with your actual file ID
-    destination = "data/faiss_hnsw_index.idx"  # Path to save the .idx file
+    destination = "faiss_hnsw_index.idx"  # Path to save the .idx file
     os.makedirs("data", exist_ok=True)  # Create the data directory if it doesn't exist
 
     if not os.path.exists(destination):
