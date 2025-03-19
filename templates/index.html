@@ -1,1 +1,207 @@
-a
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 KIIT BOT 1.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS to ensure dark mode works properly */
+        .dark {
+            background-color: #1a202c; /* Tailwind's dark:bg-gray-900 */
+            color: #f7fafc; /* Tailwind's dark:text-gray-100 */
+        }
+        .dark .bg-white {
+            background-color: #2d3748; /* Tailwind's dark:bg-gray-800 */
+        }
+        .dark .bg-gray-50 {
+            background-color: #4a5568; /* Tailwind's dark:bg-gray-700 */
+        }
+        .dark .border-gray-300 {
+            border-color: #4a5568; /* Tailwind's dark:border-gray-600 */
+        }
+        .dark .text-gray-500 {
+            color: #a0aec0; /* Tailwind's dark:text-gray-400 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 flex justify-center items-center min-h-screen transition-all duration-300">
+    <!-- Full-Window Container -->
+    <div class="w-full h-screen bg-white dark:bg-gray-800 flex flex-col">
+        <!-- Header with KIIT Logo and Dark Mode Toggle -->
+        <div class="flex justify-between items-center p-6 border-b border-gray-300 dark:border-gray-600">
+            <div class="flex items-center gap-4">
+                <!-- KIIT Logo -->
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.cleanpng.com%2Fpng-kiit-school-of-rural-management-kiit-technology-bu-960050%2F3.html&psig=AOvVaw19YD8OthyjaIOPZ-a26FJM&ust=1742496353683000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNDOq_TmlowDFQAAAAAdAAAAABAJ" alt="KIIT Logo" class="w-12 h-12 rounded-lg">
+                <h1 class="text-3xl font-bold text-green-600 dark:text-green-400 flex items-center gap-2">
+                    <span class="animate-bounce">🎓</span> KIIT Virtual Assistant
+                </h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="clearChat()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all">Clear Chat</button>
+                <button onclick="toggleTheme()" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-all">
+                    <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chatbox -->
+        <div id="chatbox" class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-700 space-y-3 scroll-smooth">
+            <p class="text-gray-500 dark:text-gray-400 text-sm animate-fade-in">Ask me anything about KIIT University!</p>
+        </div>
+
+        <!-- Input Field with Typing Indicator -->
+        <div class="p-6 border-t border-gray-300 dark:border-gray-600">
+            <div id="typing-indicator" class="hidden text-sm text-gray-500 dark:text-gray-400 mb-2 animate-pulse">
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 border-2 border-gray-500 dark:border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                    KIIT Bot is typing...
+                </div>
+            </div>
+            <div class="flex">
+                <input id="user-input" type="text" class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 dark:bg-gray-700 dark:text-white transition-all" placeholder="Type your message..." onkeypress="handleKeyPress(event)" aria-label="Type your message">
+                <button onclick="sendMessage()" class="ml-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all" aria-label="Send message">Send</button>
+            </div>
+        </div>
+
+        <!-- Scroll-to-Bottom Button -->
+        <button id="scroll-to-bottom" class="hidden fixed bottom-20 right-6 p-2 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-all">
+            ↓
+        </button>
+    </div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle("dark");
+            const themeIcon = document.getElementById("theme-icon");
+            const themeText = document.getElementById("theme-text");
+            if (body.classList.contains("dark")) {
+                themeIcon.textContent = "☀️";
+                themeText.textContent = "Light Mode";
+            } else {
+                themeIcon.textContent = "🌙";
+                themeText.textContent = "Dark Mode";
+            }
+        }
+
+        // Handle Enter Key Press
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        // Simulate Typing Indicator
+        function showTypingIndicator() {
+            const typingIndicator = document.getElementById("typing-indicator");
+            typingIndicator.classList.remove("hidden");
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById("typing-indicator");
+            typingIndicator.classList.add("hidden");
+        }
+
+        // Save messages to localStorage
+        function saveMessages() {
+            const chatbox = document.getElementById("chatbox");
+            localStorage.setItem("chatMessages", chatbox.innerHTML);
+        }
+
+        // Load messages from localStorage
+        function loadMessages() {
+            const chatbox = document.getElementById("chatbox");
+            const savedMessages = localStorage.getItem("chatMessages");
+            if (savedMessages) {
+                chatbox.innerHTML = savedMessages;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }
+        }
+
+        // Clear Chat
+        function clearChat() {
+            const chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm animate-fade-in">Ask me anything about KIIT University!</p>';
+            localStorage.removeItem("chatMessages");
+        }
+
+        // Scroll-to-Bottom Button
+        const chatbox = document.getElementById("chatbox");
+        const scrollButton = document.getElementById("scroll-to-bottom");
+
+        chatbox.addEventListener("scroll", () => {
+            if (chatbox.scrollTop + chatbox.clientHeight < chatbox.scrollHeight - 50) {
+                scrollButton.classList.remove("hidden");
+            } else {
+                scrollButton.classList.add("hidden");
+            }
+        });
+
+        scrollButton.addEventListener("click", () => {
+            chatbox.scrollTop = chatbox.scrollHeight;
+        });
+
+        // Send Message Function
+        async function sendMessage() {
+            const userInput = document.getElementById("user-input").value.trim();
+            if (!userInput) return;
+
+            const chatbox = document.getElementById("chatbox");
+            const timestamp = new Date().toLocaleTimeString();
+            chatbox.innerHTML += `
+                <div class="text-right animate-fade-in">
+                    <span class="bg-blue-600 text-white px-4 py-2 rounded-lg inline-block">You: ${userInput}</span>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${timestamp}</p>
+                </div>
+            `;
+
+            document.getElementById("user-input").value = "";
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate API call delay
+            setTimeout(async () => {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({"message": userInput})
+                });
+
+                const result = await response.json();
+                const botTimestamp = new Date().toLocaleTimeString();
+                chatbox.innerHTML += `
+                    <div class="text-left animate-fade-in">
+                        <span class="bg-green-600 text-white px-4 py-2 rounded-lg inline-block">KIIT Bot: ${result.response}</span>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${botTimestamp}</p>
+                    </div>
+                `;
+
+                hideTypingIndicator();
+                chatbox.scrollTop = chatbox.scrollHeight;
+                saveMessages();
+            }, 1500); // Simulate 1.5 seconds delay for API response
+        }
+
+        // Load messages and show welcome message on page load
+        window.onload = () => {
+            loadMessages();
+            if (!localStorage.getItem("chatMessages")) {
+                const chatbox = document.getElementById("chatbox");
+                const welcomeTimestamp = new Date().toLocaleTimeString();
+                chatbox.innerHTML += `
+                    <div class="text-left animate-fade-in">
+                        <span class="bg-green-600 text-white px-4 py-2 rounded-lg inline-block">KIIT Bot: Hello! How can I assist you today?</span>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${welcomeTimestamp}</p>
+                    </div>
+                `;
+                saveMessages();
+            }
+        };
+    </script>
+</body>
+</html>
