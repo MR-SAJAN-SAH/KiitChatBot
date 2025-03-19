@@ -1,0 +1,1 @@
+faiss_hnsw_index.idx filter=lfs diff=lfs merge=lfs -text
