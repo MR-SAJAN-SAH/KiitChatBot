@@ -5,14 +5,13 @@ from joblib import Parallel, delayed
 import os
 import pickle
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from utils import load_idx_file  # Import the utility function
 
 # Load Embedding Model
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 model = SentenceTransformer(MODEL_NAME)
 
 # FAISS Index Parameters
-FAISS_INDEX_PATH = load_idx_file()  # Use the utility function to get the .idx file path
+FAISS_INDEX_PATH = "faiss_hnsw_index.idx"
 HNSW_M = 32  # Higher M = better recall, slightly slower index time
 EF_SEARCH = 64  # Higher = more accurate retrieval
 D = 384  # Embedding dimension for MiniLM
@@ -20,8 +19,6 @@ D = 384  # Embedding dimension for MiniLM
 # Text Chunking Parameters
 CHUNK_SIZE = 256
 OVERLAP = 50
-
-# Rest of the code remains the same...
 
 
 def chunk_text(text, chunk_size=CHUNK_SIZE, overlap=OVERLAP):
