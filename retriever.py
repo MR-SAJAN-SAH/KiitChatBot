@@ -4,18 +4,21 @@ import pickle
 import os
 from sentence_transformers import SentenceTransformer
 from joblib import Memory
+from utils import load_idx_file  # Import the utility function
 
 # Load Embedding Model
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 model = SentenceTransformer(MODEL_NAME)
 
 # FAISS Index Parameters
-FAISS_INDEX_PATH = "faiss_hnsw_index.idx"
+FAISS_INDEX_PATH = load_idx_file()  # Use the utility function to get the .idx file path
 TEXT_CHUNKS_PATH = "text_chunks.pkl"
 EF_SEARCH = 64  # Controls recall vs. speed
 
 # Caching Mechanism to Speed Up Repeated Queries
 memory = Memory(location="cache", verbose=0)
+
+# Rest of the code remains the same...
 
 
 def load_faiss_index(path=FAISS_INDEX_PATH):
