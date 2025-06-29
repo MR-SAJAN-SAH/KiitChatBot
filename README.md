@@ -31,16 +31,13 @@
 
 ---
 
- How It Works (RAG Pipeline)
-mermaid
-Copy
-Edit
-graph TD;
-    A[User Query] --> B[Embed Query];
-    B --> C[Search FAISS];
-    C --> D[Top Relevant Chunks];
-    D --> E[Pass to LLM];
-    E --> F[Final Response]
+## How It Works (RAG Pipeline)
+#graph TD;
+ #   A[User Query] --> B[Embed Query];
+  #  B --> C[Search FAISS];
+   # C --> D[Top Relevant Chunks];
+   #D --> E[Pass to LLM];
+   # E --> F[Final Response]
 
 📍 Use Cases
 📧 Ask about exam dates, circulars, placement info from your inbox
